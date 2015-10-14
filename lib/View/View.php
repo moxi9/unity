@@ -39,4 +39,8 @@ class View {
 
 		fatal('Class is not an instance of View\\Template');
 	}
+
+	public function __toString() {
+		return '';
+	}
 }

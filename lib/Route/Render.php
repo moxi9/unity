@@ -29,7 +29,6 @@ class Render {
 					$fail = false;
 
 					foreach ($parts as $iteration => $segment) {
-
 						if ($activeRoute === true && isset($segments[$iteration]) && substr($segments[$iteration], 0, 1) == ':') {
 
 							if (!empty($active['where'])) {
@@ -67,6 +66,10 @@ class Render {
 		}
 
 		if ($active !== null) {
+			if (isset($active['auth'])) {
+				$this->app->auth->active(true);
+			}
+
 			if ($active['accept'] != 'any' &&
 				(
 					(is_string($active['accept']) && $active['accept'] != $request_method)
@@ -83,12 +86,12 @@ class Render {
 				list($class, $method) = explode('@', $active['action']);
 				$object = new \ReflectionClass($class);
 				$ref = $object->newInstanceWithoutConstructor();
-				if (!method_exists($ref, $method)) {
+
+				if (!in_array($method, ['post', 'delete', 'get', 'put']) && !method_exists($ref, $method)) {
 					fatal('"%s" method does not exist for this route.', $method);
 				}
 
 				$response = call_user_func_array([$ref, $method], $params);
-
 			}
 		}
 

@@ -39,7 +39,11 @@ function error($message) {
 	throw new Unity\Exception($message);
 }
 
-function config() {
+function config($key = null, $default = null) {
+	if ($key !== null) {
+		return app()->config->get($key, $default);
+	}
+
 	return app()->config;
 }
 
@@ -47,7 +51,27 @@ function cache() {
 	return app()->cache;
 }
 
-function request() {
+function redis() {
+	return app()->redis;
+}
+
+function cookie() {
+	return app()->cookie;
+}
+
+function url($route = null) {
+	if ($route !== null) {
+		return app()->url->make($route);
+	}
+
+	return app()->url;
+}
+
+function request($name = null) {
+	if ($name !== null) {
+		return app()->request->get($name);
+	}
+
 	return app()->request;
 }
 
@@ -65,6 +89,10 @@ function view($name = null, $params = []) {
 	}
 
 	return app()->view->render($name, $params);
+}
+
+function finder() {
+	return app()->finder;
 }
 
 /**
@@ -88,15 +116,31 @@ function html() {
 	return app()->html;
 }
 
+function moment() {
+	return app()->moment;
+}
+
+function auth() {
+	return app()->auth;
+}
+
 /**
  * @return \Unity\Validation
  */
-function validation() {
+function validation(Closure $callback = null) {
+	if ($callback !== null && $callback instanceof Closure) {
+		if (app()->validation->passed() !== false) {
+			return call_user_func($callback);
+		}
+
+		return null;
+	}
+
 	return app()->validation;
 }
 
-function d($out) {
+function d($out, $var_dump = false) {
 	echo '<pre>';
-	print_r($out);
+	($var_dump ? var_dump($out) : print_r($out));
 	echo '</pre>';
 }

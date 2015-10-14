@@ -30,10 +30,20 @@ class Input {
 			}
 		}
 
+		$class = 'form-control';
 		if ($method == 'submit') {
 			$name = '__submit';
+			$class = 'btn btn-primary';
 		}
-		$html = '<input type="' . $method . '" name="' . $name . '" data-unity="true">';
+
+		$html = '';
+		if ($method != 'submit') {
+			$html .= '<div class="form-group">';
+		}
+		$html .= '<input type="' . $method . '" name="' . $name . '" data-unity="true" class="' . $class . '">';
+		if ($method != 'submit') {
+			$html .= '</div>';
+		}
 
 		$hash = md5($method . (isset($args[0]) ? $args[0] : ''));
 		$this->service->__form[$hash] = $html;

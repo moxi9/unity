@@ -15,6 +15,30 @@ namespace Unity;
 class Route {
 
 	public function __call($method, $args) {
+		if (is_string($args[0]) && substr($args[0], -4) == '.php' && file_exists($args[0])) {
+			$routes = require($args[0]);
+			if (is_array($routes)) {
+				foreach ($routes as $route => $actions) {
+					$this->__call('any', [$route, $actions]);
+				}
+
+				return null;
+			}
+		}
+
+		if (is_array($args[1])) {
+			$a = $args[1];
+			if (isset($a['route'])) {
+				$args[1] = $a['route'];
+			}
+			$r = route($args[0], $args[1]);
+			if (isset($a['where'])) {
+				call_user_func([$r, 'where'], $a['where']);
+			}
+
+			return null;
+		}
+
 		if ($method == 'any') {
 			$parts = explode(' ', $args[0]);
 
@@ -25,6 +49,11 @@ class Route {
 			$args[0] = (isset($parts[1]) ? $parts[1] : $parts[0]);
 		}
 
-		return new Route\Service($args[0], $args[1], $method);
+		$service = new Route\Service($args[0], $args[1], $method);
+		if (isset($parts) && isset($parts[2])) {
+			$service->auth();
+		}
+
+		return $service;
 	}
 }

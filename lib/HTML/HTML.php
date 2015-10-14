@@ -30,7 +30,7 @@ class HTML {
 		$this->service->__is_form = (object) [
 			'name' => $name,
 			'token' => md5($name),
-			'action' => $action,
+			'action' => app()->url->make($action),
 			'method' => $method
 		];
 

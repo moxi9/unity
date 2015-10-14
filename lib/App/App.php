@@ -3,6 +3,12 @@
 namespace Unity;
 
 class App {
+
+	/**
+	 * @var Auth
+	 */
+	public $auth;
+
 	/**
 	 * @var Db
 	 */
@@ -12,6 +18,26 @@ class App {
 	 * @var Cache
 	 */
 	public $cache;
+
+	/**
+	 * @var Cookie
+	 */
+	public $cookie;
+
+	/**
+	 * @var Url
+	 */
+	public $url;
+
+	/**
+	 * @var Moment
+	 */
+	public $moment;
+
+	/**
+	 * @var Redis
+	 */
+	public $redis;
 
 	/**
 	 * @var Request
@@ -27,6 +53,11 @@ class App {
 	 * @var View
 	 */
 	public $view;
+
+	/**
+	 * @var Finder
+	 */
+	public $finder;
 
 	/**
 	 * @var HTTP

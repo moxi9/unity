@@ -4,6 +4,10 @@ namespace Unity;
 
 class Request {
 
+	public function all() {
+		return $_REQUEST;
+	}
+
 	public function get($name) {
 		return (isset($_REQUEST[$name]) ? $_REQUEST[$name] : null);
 	}
@@ -27,6 +31,10 @@ class Request {
 
 		$post = [];
 		$token = $_POST['__token'];
+		if (strlen($token) != 32) {
+			$token = md5($token);
+		}
+
 		foreach ($_POST as $key => $value) {
 			if (md5($key) == $token) {
 				$post = $value;
@@ -63,5 +71,9 @@ class Request {
 		$count--;
 
 		return (isset($uri[$count]) ? $uri[$count] : null);
+	}
+
+	public function __toString() {
+		return '';
 	}
 }

@@ -35,10 +35,10 @@ class Service {
 			switch ($method) {
 				case 'title':
 					if ($this->__last_method == 'submit') {
-						$this->__form[$this->__last] = '<div class="form-control">' . str_replace('data-unity="true"', 'data-unity="true" value="' . $args[0] . '"', $this->__form[$this->__last]) . '</div>';
+						$this->__form[$this->__last] = '' . str_replace('data-unity="true"', 'data-unity="true" value="' . $args[0] . '"', $this->__form[$this->__last]) . '';
 					}
 					else {
-						$this->__form[$this->__last] = '<div class="form"><div class="form-title">' . (isset($args[0]) ? $args[0] : '') . '</div><div class="form-control">' . $this->__form[$this->__last] . '</div></div>';
+						$this->__form[$this->__last] = '<label>' . (isset($args[0]) ? $args[0] : '') . '</label>' . $this->__form[$this->__last] . '';
 					}
 					break;
 				default:
@@ -59,7 +59,7 @@ class Service {
 			}
 
 			$html .= '<form method="' . $this->__is_form->method . '" action="' . $this->__is_form->action . '">';
-			$html .= '<div><input type="text" name="__token" value="' . $this->__is_form->token . '"></div>';
+			$html .= '<div><input type="hidden" name="__token" value="' . $this->__is_form->token . '"></div>';
 		}
 		$html .= implode('', $this->__form);
 		if ($this->__is_form) {

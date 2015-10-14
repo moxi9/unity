@@ -22,10 +22,18 @@ class Validation {
 		) {
 			$post = request()->post();
 			$validation = $this->validations[request()->token()];
-
 			try {
 				return new Validation\Service($this, $post, $validation);
-			} catch (\Exception $e) {
+			} catch (Exception $e) {
+				if (app()->http->is_ajax()) {
+					app()->http->type('json');
+					http_response_code(400);
+					echo json_encode([
+						'error' => $e->getMessage()
+					]);
+					exit;
+				}
+
 				return false;
 			}
 		}

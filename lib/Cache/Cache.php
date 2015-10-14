@@ -10,28 +10,31 @@ namespace Unity;
  * @method Cache get($key)
  */
 class Cache {
-	public function __call($method, $args) {
-		$driver = null;
-		switch (config()->cache_driver()) {
-			case 'memcached':
-				$memcached = new \Memcached();
-				$memcached->addServer(config()->cache_host(), 11211);
+	private $driver = null;
 
-				$driver = new \Doctrine\Common\Cache\MemcachedCache();
-				$driver->setMemcached($memcached);
-				break;
-			case 'apc':
-				$driver = new \Doctrine\Common\Cache\ApcCache();
-				break;
+	public function __call($method, $args) {
+		if ($this->driver === null) {
+			switch (config()->cache_driver()) {
+				case 'memcached':
+					$memcached = new \Memcached();
+					$memcached->addServer(config()->cache_host(), 11211);
+
+					$this->driver = new \Doctrine\Common\Cache\MemcachedCache();
+					$this->driver->setMemcached($memcached);
+					break;
+				case 'apc':
+					$this->driver = new \Doctrine\Common\Cache\ApcCache();
+					break;
+			}
 		}
 
 		switch ($method) {
 			case 'set':
-				// $driver->delete($args[0]);
-				$driver->save($args[0], json_encode($args[1]));
+				// $this->driver->delete($args[0]);
+				$this->driver->save($args[0], json_encode($args[1]));
 				break;
 			case 'get':
-				return json_decode($driver->fetch($args[0]));
+				return json_decode($this->driver->fetch($args[0]));
 				break;
 		}
 	}

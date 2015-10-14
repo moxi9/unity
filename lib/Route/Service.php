@@ -8,6 +8,7 @@ namespace Unity\Route;
  *
  * @method Service accept($methods)
  * @method Service where($clause)
+ * @method Service auth()
  */
 class Service {
 	public static $__routes = [];
@@ -23,7 +24,7 @@ class Service {
 	}
 
 	public function __call($method, $args) {
-		self::$__routes[$this->route][$method] = $args[0];
+		self::$__routes[$this->route][$method] = (isset($args[0]) ? $args[0] : '');
 
 		return $this;
 	}

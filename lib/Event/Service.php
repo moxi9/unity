@@ -7,6 +7,7 @@ namespace Unity\Event;
  * @package Unity\Event
  *
  * @method Service validation_check(\Closure $callback = null)
+ * @method Service auth_active(\Closure $callback = null)
  */
 class Service {
 	public $events = [];
@@ -26,8 +27,7 @@ class Service {
 	}
 
 	public function __call($name, $args = []) {
-		$callback = $args[0];
-
+		$callback = (isset($args[0]) ? $args[0] : null);
 		if ($callback === null) {
 			$this->last = $name;
 

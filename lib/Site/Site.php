@@ -28,19 +28,35 @@ class Site {
 			exit('fatal: ' . $e->getMessage());
 		} catch (Exception $e) {
 			$response = $e->getMessage();
+			if (app()->http->is_ajax()) {
+				http_response_code(400);
+				$response = [
+					'error' => $e->getMessage()
+				];
+			}
 		}
 
 		if (is_object($response) || is_array($response)) {
 			http()->type('json');
 			echo json_encode($response, JSON_PRETTY_PRINT);
 		}
-		else if ($response === false) {
-			http()->type('404');
-			echo 'Page not found.';
-		}
 		else {
-			http()->type('html');
-			echo $response;
+
+			if ($response === false) {
+				http()->type('404');
+				$response = 'Page not found.';
+			}
+			else {
+				http()->type('html');
+			}
+
+			if ($response === null || app()->http->is_ajax()) {
+				exit;
+			}
+
+			echo view('@theme/layout.html', [
+				'content' => $response
+			]);
 		}
 	}
 }
