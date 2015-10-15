@@ -4,6 +4,8 @@
 	"require": {
 		"twig/twig": "~1.0",
 		"doctrine/dbal": "2.5.1",
-		"symfony/finder": "^2.7"
+		"filp/whoops": "1.*",
+		"symfony/finder": "^2.7",
+		"predis/predis": "^1.0"
 	}
 }
