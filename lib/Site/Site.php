@@ -34,6 +34,9 @@ class Site {
 					'error' => $e->getMessage()
 				];
 			}
+			else if (($handler = config('error_handler'))) {
+				$response = call_user_func($handler, $e);
+			}
 		}
 
 		if (is_object($response) || is_array($response)) {
@@ -41,7 +44,6 @@ class Site {
 			echo json_encode($response, JSON_PRETTY_PRINT);
 		}
 		else {
-
 			if ($response === false) {
 				http()->type('404');
 				$response = 'Page not found.';

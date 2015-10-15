@@ -15,6 +15,8 @@ namespace Unity;
  * @method Config db_pass($password = null)
  * @method Config db_driver($driver = 'mysql')
  *
+ * @method Config error_handler(\Closure $callback)
+ *
  * @method Config cache_driver($driver = 'memcached')
  * @method Config cache_host($host = null)
  */

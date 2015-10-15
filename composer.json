@@ -1,4 +1,5 @@
 {
+	"name": "moxi9/unity",
 	"require": {
 		"twig/twig": "~1.0",
 		"doctrine/dbal": "2.5.1",

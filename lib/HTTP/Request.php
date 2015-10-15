@@ -16,9 +16,16 @@ class Request {
 	private $params = [];
 	private $method = 'GET';
 	private $data;
+	private $auth = [];
 
 	public function __construct($url) {
 		$this->url = $url;
+	}
+
+	public function auth($user, $password) {
+		$this->auth = [$user, $password];
+
+		return $this;
 	}
 
 	public function __call($method, $args) {
@@ -57,10 +64,11 @@ class Request {
 			curl_setopt($curl, CURLOPT_HTTPHEADER, $this->_headers);
 		}
 
-		if ($this->_auth) {
-			curl_setopt($curl, CURLOPT_USERPWD, $this->_auth[0] . ':' . $this->_auth[1]);
-		}
 		*/
+
+		if ($this->auth) {
+			curl_setopt($curl, CURLOPT_USERPWD, $this->auth[0] . ':' . $this->auth[1]);
+		}
 
 		curl_setopt($curl, CURLOPT_TIMEOUT, 10);
 
