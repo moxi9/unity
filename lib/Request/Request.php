@@ -50,8 +50,15 @@ class Request {
 	}
 
 	public function uri() {
+		$r = $_SERVER['REQUEST_URI'];
 		$uri = '';
-		$request = explode('index.php', $_SERVER['REQUEST_URI']);
+		if (!strpos($r, 'index.php')) {
+			$n = explode('index.php', $_SERVER['SCRIPT_NAME']);
+			if (isset($n[0])) {
+				$r = '/index.php/' . str_replace($n[0], '', $r);
+			}
+		}
+		$request = explode('index.php', $r);
 
 		if (isset($request[1])) {
 			$uri = $request[1];

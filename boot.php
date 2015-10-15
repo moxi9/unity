@@ -8,8 +8,9 @@ set_error_handler(function() {
 
 error_reporting(E_ALL);
 
-if (file_exists(__DIR__ . '/../../vendor/autoload.php')) {
-	require(__DIR__ . '/../../vendor/autoload.php');
+$autoload = __DIR__ . '/../../autoload.php';
+if (file_exists($autoload)) {
+	require($autoload);
 }
 
 $handler = new \Whoops\Handler\PrettyPageHandler;
@@ -17,7 +18,7 @@ $handler->setEditor('phpstorm');
 
 $whoops = new \Whoops\Run;
 $whoops->pushHandler($handler);
-$whoops->register();
+//$whoops->register();
 
 require(__DIR__ . '/helpers/functions.php');
 

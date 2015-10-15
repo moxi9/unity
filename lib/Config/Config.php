@@ -24,7 +24,10 @@ class Config {
 	private $cache = [];
 
 	public function boot() {
-		$this->cache['vendor'] = __DIR__ . '/../../../';
+		$this->cache['vendor'] = __DIR__ . '/../../../../';
+		if (!is_dir($this->cache['vendor'])) {
+			fatal('Missing vendor path: %s', $this->cache['vendor']);
+		}
 	}
 
 	public function set($key, $value) {
