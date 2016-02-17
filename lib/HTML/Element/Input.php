@@ -30,17 +30,18 @@ class Input {
 			}
 		}
 
-		$class = 'form-control';
+		$value = '';
+		$class = 'form_element';
 		if ($method == 'submit') {
+			$value = $args[0];
 			$name = '__submit';
-			$class = 'btn btn-primary';
 		}
 
 		$html = '';
 		if ($method != 'submit') {
-			$html .= '<div class="form-group">';
+			$html .= '<div class="form_group">';
 		}
-		$html .= '<input type="' . $method . '" name="' . $name . '" data-unity="true" class="' . $class . '">';
+		$html .= '<input type="' . $method . '" name="' . $name . '" data-unity="true" class="' . $class . '" value="' . $value . '"">';
 		if ($method != 'submit') {
 			$html .= '</div>';
 		}

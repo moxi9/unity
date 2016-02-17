@@ -58,7 +58,7 @@ class Service {
 				$html .= \Unity\Validation\Service::$out;
 			}
 
-			$html .= '<form method="' . $this->__is_form->method . '" action="' . $this->__is_form->action . '">';
+			$html .= '<form method="' . $this->__is_form->method . '" action="' . $this->__is_form->action . '" class="unity_form">';
 			$html .= '<div><input type="hidden" name="__token" value="' . $this->__is_form->token . '"></div>';
 		}
 		$html .= implode('', $this->__form);

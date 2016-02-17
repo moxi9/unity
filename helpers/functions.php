@@ -33,7 +33,7 @@ function error($message) {
 		$message = $args[0];
 		unset($args[0]);
 
-		$message = vsprintf($message, array_values($args));
+		$message = (is_array($message) ? $message : vsprintf($message, array_values($args)));
 	}
 
 	throw new Unity\Exception($message);
@@ -95,6 +95,13 @@ function finder() {
 	return app()->finder;
 }
 
+function block($location = null, $route = null) {
+	if ($location !== null) {
+		return app()->block->make($location, $route);
+	}
+	return app()->block;
+}
+
 /**
  * @return \Unity\Db
  */
@@ -114,6 +121,17 @@ function event() {
  */
 function html() {
 	return app()->html;
+}
+
+/**
+ * @return \Unity\Asset
+ */
+function asset($path = null) {
+	if ($path !== null) {
+		return app()->asset->add($path);
+	}
+
+	return app()->asset;
 }
 
 function moment() {

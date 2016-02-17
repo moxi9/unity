@@ -9,6 +9,9 @@ namespace Unity;
  * @method Config storage($value = null)
  * @method Config vendor($value = null)
  *
+ * @method Config asset_url($url = null)
+ * @method Config asset_dir($url = null)
+ *
  * @method Config db_name($name = null)
  * @method Config db_host($host = 'localhost')
  * @method Config db_user($user = null)
@@ -49,6 +52,11 @@ class Config {
 				$name = substr_replace($class, '', 0, (strlen($namespace) + 1));
 				$file = $path . $name . '.php';
 				if (file_exists($file)) {
+					require($file);
+				}
+				else {
+					$file = $path . $name . '/' . $name . '.php';
+
 					require($file);
 				}
 			}

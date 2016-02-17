@@ -15,7 +15,19 @@ namespace Unity;
 class Route {
 
 	public function __call($method, $args) {
-		if (is_string($args[0]) && substr($args[0], -4) == '.php' && file_exists($args[0])) {
+		if (is_string($args[0]) && strpos($args[0], ':')) {
+			$command = explode(':', $args[0]);
+			switch ($command[0]) {
+				case 'scan':
+					foreach (scandir($command[1]) as $file) {
+						if (substr($file, -4) == '.php') {
+							require($command[1] . $file);
+						}
+					}
+					break;
+			}
+		}
+		else if (is_string($args[0]) && substr($args[0], -4) == '.php' && file_exists($args[0])) {
 			$routes = require($args[0]);
 			if (is_array($routes)) {
 				foreach ($routes as $route => $actions) {

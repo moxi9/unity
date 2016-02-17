@@ -8,7 +8,7 @@ class HTTP {
 	}
 
 	public function is_ajax() {
-		if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+		if ((!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') || isset($_REQUEST['is_ajax'])) {
 			return true;
 		}
 
@@ -37,6 +37,9 @@ class HTTP {
 				break;
 		}
 
+		if ($type != '404') {
+			header('HTTP/1.1 200 OK');
+		}
 		header('Content-type: ' . $content);
 	}
 }

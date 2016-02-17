@@ -3,25 +3,38 @@
 namespace Unity;
 
 class Site {
+	private $_app;
+	
 	public function __construct($callback = null) {
-		$app = new App();
-		$response = false;
+		$this->_app = new App();
 
-		try {
-			foreach (scandir(config()->vendor()) as $vendor) {
-				$path = config()->vendor() . $vendor . '/unity.php';
+		$v = config()->vendor();
+		foreach (scandir($v) as $vendor) {
+			if ($vendor == '.' || $vendor == '..') {
+				continue;
+			}
+
+			$d = $v . $vendor;
+			if (!is_dir($d)) {
+				continue;
+			}
+			foreach (scandir($d) as $name) {
+				$path = $d . '/' . $name . '/unity.php';
 				if (file_exists($path)) {
 					$module = require($path);
-
 					if ($module instanceof \Closure) {
 						call_user_func($module);
 					}
 				}
 			}
+		}
 
-			call_user_func($callback, $app);
-
-			$render = new Route\Render($app);
+		call_user_func($callback, $this->_app);
+	}
+	
+	public function render($callback = null) {
+		try {
+			$render = new Route\Render($this->_app);
 			$response = $render->execute();
 		} catch (Exception\Fatal $e) {
 			d($e->getTraceAsString());
@@ -31,7 +44,7 @@ class Site {
 			if (app()->http->is_ajax()) {
 				http_response_code(400);
 				$response = [
-					'error' => $e->getMessage()
+					'error' => $e->getMessageArray()
 				];
 			}
 			else if (($handler = config('error_handler'))) {
@@ -39,9 +52,16 @@ class Site {
 			}
 		}
 
+		$uri = request()->uri();
 		if (is_object($response) || is_array($response)) {
 			http()->type('json');
-			echo json_encode($response, JSON_PRETTY_PRINT);
+		}
+		else if (substr($uri, -3) == '.js') {
+			http()->type('js');
+
+			$url = url($uri);
+			echo 'Unity.blocklet(\'' . $url . '\', ' . json_encode(['view' => $response]) . ');';
+			exit;
 		}
 		else {
 			if ($response === false) {
@@ -52,13 +72,23 @@ class Site {
 				http()->type('html');
 			}
 
+			/*
 			if ($response === null || app()->http->is_ajax()) {
 				exit;
 			}
-
-			echo view('@theme/layout.html', [
-				'content' => $response
-			]);
+			*/
 		}
+
+		if (is_callable($callback)) {
+			return call_user_func($callback, $response);
+		}
+
+		return $response;
 	}
 }
+
+/**
+ * echo view('@theme/layout.html', [
+'content' => $response
+]);
+ */

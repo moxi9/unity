@@ -90,6 +90,16 @@ class App {
 	public $event;
 
 	/**
+	 * @var Asset
+	 */
+	public $asset;
+
+	/**
+	 * @var Block
+	 */
+	public $block;
+
+	/**
 	 * @var App
 	 */
 	private static $object;
