@@ -2,7 +2,7 @@
 
 namespace Unity\View;
 
-class Base {
+class Base implements Template {
 	private $path;
 
 	public function __construct($path) {
@@ -10,12 +10,7 @@ class Base {
 	}
 
 	public function render($name, $params = []) {
-		$file = $this->path . $name;
-
-		require($file);
-
-		$content = ob_get_contents();
-		ob_clean();
+		echo $name;
 
 		return $content;
 	}
