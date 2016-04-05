@@ -18,17 +18,18 @@ class View {
 		}
 
 		$this->path = $path;
-		$class = null;
-		if (module()->view() !== null) {
-			$object = new \ReflectionClass(module()->view());
-			$this->base = $object->newInstance($path);
-		}
-		else {
-			$this->base = new View\Base($this->path);
-		}
 	}
 
 	public function __call($method, $args) {
+		if ($this->base === null) {
+			if (module()->view() !== null) {
+				$object = new \ReflectionClass(module()->view());
+				$this->base = $object->newInstance($this->path);
+			} else {
+				$this->base = new View\Base($this->path);
+			}
+		}
+
 		if (!method_exists($this->base, $method)) {
 			fatal('"%s" method does not exist.', $method);
 		}

@@ -8,6 +8,8 @@ class Site {
 	public function __construct($callback = null) {
 		$this->_app = new App();
 
+		call_user_func($callback, $this->_app);
+
 		$v = config()->vendor();
 		foreach (scandir($v) as $vendor) {
 			if ($vendor == '.' || $vendor == '..') {
@@ -28,8 +30,6 @@ class Site {
 				}
 			}
 		}
-
-		call_user_func($callback, $this->_app);
 	}
 	
 	public function render($callback = null) {
